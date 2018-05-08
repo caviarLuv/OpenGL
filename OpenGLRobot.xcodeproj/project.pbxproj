@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		AB0B8A0A209BA6AA00CCC9ED /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = AB0B8A09209BA6AA00CCC9ED /* main.c */; };
+		AB0B8A12209BA7AB00CCC9ED /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A11209BA7AB00CCC9ED /* OpenGL.framework */; };
+		AB0B8A14209BB44D00CCC9ED /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A13209BB44D00CCC9ED /* libglfw3.a */; };
+		AB0B8A16209BB4C400CCC9ED /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A15209BB4C400CCC9ED /* Cocoa.framework */; };
+		AB0B8A18209BB4C800CCC9ED /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A17209BB4C800CCC9ED /* GLUT.framework */; };
+		AB0B8A1A209BB4CD00CCC9ED /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A19209BB4CD00CCC9ED /* CoreVideo.framework */; };
+		AB0B8A1C209BB4D300CCC9ED /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A1B209BB4D300CCC9ED /* IOKit.framework */; };
+		AB0B8A20209BB6E700CCC9ED /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = AB0B8A1F209BB6E700CCC9ED /* glad.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +32,13 @@
 /* Begin PBXFileReference section */
 		AB0B8A06209BA6AA00CCC9ED /* OpenGLRobot */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenGLRobot; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0B8A09209BA6AA00CCC9ED /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		AB0B8A11209BA7AB00CCC9ED /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		AB0B8A13209BB44D00CCC9ED /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "../../Downloads/glfw-3.2.1/build/src/Debug/libglfw3.a"; sourceTree = "<group>"; };
+		AB0B8A15209BB4C400CCC9ED /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		AB0B8A17209BB4C800CCC9ED /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		AB0B8A19209BB4CD00CCC9ED /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		AB0B8A1B209BB4D300CCC9ED /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		AB0B8A1F209BB6E700CCC9ED /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glad.c; path = ../../../Downloads/glad/src/glad.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +46,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB0B8A1C209BB4D300CCC9ED /* IOKit.framework in Frameworks */,
+				AB0B8A1A209BB4CD00CCC9ED /* CoreVideo.framework in Frameworks */,
+				AB0B8A18209BB4C800CCC9ED /* GLUT.framework in Frameworks */,
+				AB0B8A16209BB4C400CCC9ED /* Cocoa.framework in Frameworks */,
+				AB0B8A14209BB44D00CCC9ED /* libglfw3.a in Frameworks */,
+				AB0B8A12209BA7AB00CCC9ED /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +63,7 @@
 			children = (
 				AB0B8A08209BA6AA00CCC9ED /* OpenGLRobot */,
 				AB0B8A07209BA6AA00CCC9ED /* Products */,
+				AB0B8A10209BA7AA00CCC9ED /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +79,22 @@
 			isa = PBXGroup;
 			children = (
 				AB0B8A09209BA6AA00CCC9ED /* main.c */,
+				AB0B8A1F209BB6E700CCC9ED /* glad.c */,
 			);
 			path = OpenGLRobot;
+			sourceTree = "<group>";
+		};
+		AB0B8A10209BA7AA00CCC9ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB0B8A1B209BB4D300CCC9ED /* IOKit.framework */,
+				AB0B8A19209BB4CD00CCC9ED /* CoreVideo.framework */,
+				AB0B8A17209BB4C800CCC9ED /* GLUT.framework */,
+				AB0B8A15209BB4C400CCC9ED /* Cocoa.framework */,
+				AB0B8A13209BB44D00CCC9ED /* libglfw3.a */,
+				AB0B8A11209BA7AB00CCC9ED /* OpenGL.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB0B8A0A209BA6AA00CCC9ED /* main.c in Sources */,
+				AB0B8A20209BB6E700CCC9ED /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +252,8 @@
 		AB0B8A0E209BA6AA00CCC9ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "/usr/local/include/**";
+				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -223,6 +261,8 @@
 		AB0B8A0F209BA6AA00CCC9ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "/usr/local/include/**";
+				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -246,6 +286,7 @@
 				AB0B8A0F209BA6AA00CCC9ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

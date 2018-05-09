@@ -244,15 +244,16 @@ void drawCar(Car*);
 Cell** initCell(void);
 void generateRandomObstacle(Cell**);
 void updateCar(Car*, int);
+int collisionCheck(Car*,int);
 
 //const Variables
 const int gridSize = 32;
 const int gridNum = 10;
 const int SCREEN_WIDTH = gridSize*gridNum + 100;
 const int SCREEN_HEIGHT = gridSize*gridNum + 100;
-
-
 Car* car = NULL;
+Cell** gameMap = NULL;
+
 //Function Definition
 static void inputK(GLFWwindow* window, int key, int scancode, int action, int mods){
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
@@ -276,30 +277,91 @@ static void error_callback(int error, const char* description){
     fputs(description, stderr);
 }
 
+int collisionCheck(Car* car,  int num){
+    int row = ((car->y)-50)/gridSize;
+    int col = ((car->x)-50)/gridSize;
+    printf("\n%d, %d",row,col);
+    if(num == 0){
+        if(row > 0){
+            if(gameMap[row-1][col].value == 1){
+                return 0;
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 0;
+        }
+    }
+    else if(num == 1){
+        if(row < gridNum){
+            if(gameMap[row+1][col].value == 1){
+                return 0;
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 0;
+        }
+    }
+    else if(num == 2){
+        if(col > 0){
+            if(gameMap[row][col-1].value == 1){
+                return 0;
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 0;
+        }
+
+    }
+    else if(num == 3){
+        if(col < gridNum){
+            if(gameMap[row][col+1].value == 1){
+                return 0;
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 0;
+        }
+    }
+    else{return 0;}
+}
+
 void updateCar(Car* car, int num){
     //see enum Control
     if(num == 0){
-        if(car->y > 50){
-        car->y = (car->y) - gridSize;
+        if(collisionCheck(car, num)){
+            car->y = (car->y) - gridSize;
         }
     }
     if(num == 1){
-        if(car->y <SCREEN_HEIGHT-(50+gridSize)){
+        if(collisionCheck(car, num)){
         car->y = (car->y) + gridSize;
         }
     }
     if(num == 2){
-        if(car->x >50){
+        if(collisionCheck(car, num)){
         car->x = (car->x) - gridSize;
         }
 
     }
     if(num == 3){
-        if(car->x < SCREEN_WIDTH-(50+gridSize)){
+        if(collisionCheck(car, num)){
         car->x = (car->x) + gridSize;
         }
     }
 }
+
 void drawCar(Car* car){
     //draw obstacle
     glColor3d(1.0, 0.0, 1.0);
@@ -333,7 +395,6 @@ Cell** initCell(){ //initialize a 10x10 cell
     Cell** gameMap = (Cell**)malloc(gridNum*sizeof(Cell*));
     int x = 50;
     int y = 50;
-    
     srand(time(0));
     for(int i = 0; i<gridNum;i++){
         *(gameMap+i) = (Cell*)calloc(gridNum, sizeof(Cell));
@@ -353,6 +414,7 @@ Cell** initCell(){ //initialize a 10x10 cell
         x=50;
         y+=gridSize;
     }
+    gameMap[0][0].value = 0; //car initial position -> NO obstacle
     return gameMap;
 }
 
@@ -391,7 +453,7 @@ int main(void){
     glfwSwapInterval(1);
     glfwSetKeyCallback(window, inputK);
     
-    Cell** gameMap = initCell();
+    gameMap = initCell();
     //initial car and its position
     car = malloc(sizeof(Car));
     car->x = 50;

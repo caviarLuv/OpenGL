@@ -14,7 +14,7 @@
 		AB0B8A18209BB4C800CCC9ED /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A17209BB4C800CCC9ED /* GLUT.framework */; };
 		AB0B8A1A209BB4CD00CCC9ED /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A19209BB4CD00CCC9ED /* CoreVideo.framework */; };
 		AB0B8A1C209BB4D300CCC9ED /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0B8A1B209BB4D300CCC9ED /* IOKit.framework */; };
-		AB0B8A20209BB6E700CCC9ED /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = AB0B8A1F209BB6E700CCC9ED /* glad.c */; };
+		AB625A4120A370FA00C2654C /* Path.c in Sources */ = {isa = PBXBuildFile; fileRef = AB625A4020A370FA00C2654C /* Path.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,7 +38,8 @@
 		AB0B8A17209BB4C800CCC9ED /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		AB0B8A19209BB4CD00CCC9ED /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		AB0B8A1B209BB4D300CCC9ED /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		AB0B8A1F209BB6E700CCC9ED /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glad.c; path = ../../../Downloads/glad/src/glad.c; sourceTree = "<group>"; };
+		AB625A3F20A370E300C2654C /* path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = path.h; sourceTree = "<group>"; };
+		AB625A4020A370FA00C2654C /* Path.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Path.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +80,8 @@
 			isa = PBXGroup;
 			children = (
 				AB0B8A09209BA6AA00CCC9ED /* main.c */,
-				AB0B8A1F209BB6E700CCC9ED /* glad.c */,
+				AB625A4020A370FA00C2654C /* Path.c */,
+				AB625A3F20A370E300C2654C /* path.h */,
 			);
 			path = OpenGLRobot;
 			sourceTree = "<group>";
@@ -154,8 +156,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB625A4120A370FA00C2654C /* Path.c in Sources */,
 				AB0B8A0A209BA6AA00CCC9ED /* main.c in Sources */,
-				AB0B8A20209BB6E700CCC9ED /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

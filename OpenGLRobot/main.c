@@ -207,362 +207,109 @@ int main(int argc, char *argv[]){
 
 }*/
 
-//------------------------------------------------------------------------------------------------------------
-//GLUT 3D
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
-#ifdef __APPLE__              //version check
-#include <GLUT/GLUT.h>
-#else
-#include <GL/glut.h>
-#endif
-
-
-#define PI 3.14159265
-
-//global variable
-int _WindowPositionX = 200;
-int _WindowPositionY = 200;
-int _WindowWidth = 512;
-int _WindowHeight = 512;
-char _WindowTitle[] = "test";
-int tn = 0;
-double t = 0;
-double dt = 1;
-double omega = PI / 180.0;  //angle for the camera
-int isClockwise = 0;
-//Prototypes
-void initialize(void);
-void display(void);
-void renderGround(void);
-void idle(void);
-void normalKeyboard(unsigned char, int, int);
-void specialKey(int, int, int);
-//----------------------------------------------------
-// define viewPoint
-//----------------------------------------------------
-double _ViewPointX = 200.0;
-double _ViewPointY = 0.0;
-double _ViewPointZ = 20.0;
-//----------------------------------------------------
-// defining rectangle/self-defined object
-//----------------------------------------------------
-GLdouble vertex[][3] = {
-    { 0.0, 0.0, 0.0 },
-    { 2.0, 0.0, 0.0 },
-    { 2.0, 2.0, 0.0 },
-    { 0.0, 2.0, 0.0 },
-    { 0.0, 0.0, 30.0 },
-    { 2.0, 0.0, 30.0 },
-    { 2.0, 2.0, 30.0 },
-    { 0.0, 2.0, 30.0 }
-};
-int face[][4] = {//defining face of the rectangle
-    { 0, 1, 2, 3 },
-    { 1, 5, 6, 2 },
-    { 5, 4, 7, 6 },
-    { 4, 0, 3, 7 },
-    { 4, 5, 1, 0 },
-    { 3, 2, 6, 7 }
-};
-GLdouble normal[][3] = {//defining the in/out of the face for the defined object
-    { 0.0, 0.0,-1.0 },
-    { 1.0, 0.0, 0.0 },
-    { 0.0, 0.0, 1.0 },
-    {-1.0, 0.0, 0.0 },
-    { 0.0,-1.0, 0.0 },
-    { 0.0, 1.0, 0.0 }
-};
-//----------------------------------------------------
-// defining texture
-//----------------------------------------------------
-typedef struct MaterialStruct {
-    GLfloat ambient[4];
-    GLfloat diffuse[4];
-    GLfloat specular[4];
-    GLfloat shininess;
-}MaterialStruct;
-//jade
-
-MaterialStruct ms_jade = {
-    {0.135,     0.2225,   0.1575,   1.0},
-    {0.54,      0.89,     0.63,     1.0},
-    {0.316228,  0.316228, 0.316228, 1.0},
-    12.8};
-//ruby
-MaterialStruct ms_ruby  = {
-    {0.1745,   0.01175,  0.01175,   1.0},
-    {0.61424,  0.04136,  0.04136,   1.0},
-    {0.727811, 0.626959, 0.626959,  1.0},
-    76.8};
-//----------------------------------------------------
-// color definition
-//----------------------------------------------------
-GLfloat red[] = { 0.8, 0.2, 0.2, 1.0 };
-GLfloat green[] = { 0.2, 0.8, 0.2, 1.0 };
-GLfloat blue[] = { 0.2, 0.2, 0.8, 1.0 };
-GLfloat yellow[] = { 0.8, 0.8, 0.2, 1.0 };
-GLfloat white[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat shininess = 30.0;
-//-----------------------------------------
-
-int main(int argc, char **argv) {
-    
-    // init GLUT and create Window
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DEPTH | GLUT_SINGLE | GLUT_RGBA);
-    glutInitWindowPosition(_WindowPositionX, _WindowPositionY);
-    glutInitWindowSize(_WindowWidth, _WindowHeight);
-    glutCreateWindow(_WindowTitle);//create the window; parameter = title
-    glutIdleFunc(idle); //must have if there's animation involve
-    
-    glutDisplayFunc(display); //call render function
-    initialize();
-    
-    //Processing keyboard input
-    glutKeyboardFunc(normalKeyboard);
-    glutSpecialFunc(specialKey);
-    
-    glutMainLoop();
-    return 0;
-    
-}
-
-//Initialize window setting
-void initialize(void){
-    glClearColor(1.0,1.0,1.0,0.0); //background
-    glEnable(GL_DEPTH_TEST);
-    
-    //------------------------------------------------
-    //settling light source
-    //--------------------------------------
-    GLfloat light_position0[] = { 50.0, 50.0, 20.0, 1.0 }; //light0 coordinate
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position0); //setting light zero; GL_LIGHT{0-8} at least
-    
-    /*
-     //Projection
-     glMatrixMode(GL_PROJECTION);//Specify matrix（GL_PROJECTION : camera、GL_MODELVIEW：model/object）
-     glLoadIdentity();//initialize matrix
-     gluPerspective(30.0, (double)_WindowWidth/(double)_WindowHeight, 0.1, 1000.0); //defining a view frustum;gluPerspactive(th, w/h, near, far);
-     //setting viewpoint from point (a) viewing point (b)
-     gluLookAt(
-     0.0, -100.0, 50.0, // Viewpoint position x,y,z; (a)
-     0.0, 100.0, 20.0,   // position of the reference point x,y,z (b)
-     0.0, 0.0, 1.0);  //direction of the up vector x,y,z; in this case, z is the height, y is depth
- 
-}
- */
-/*
-void idle(){
-    glutPostRedisplay(); //calling glutDisplayFunc() for once
-}
-
-void specialKey(int key , int x, int y){
-    switch(key){
-        case GLUT_KEY_LEFT:
-            tn = isClockwise<0? -tn:tn;
-            t = dt * tn;
-            _ViewPointX = 200.0 * cos( omega * t);
-            _ViewPointY = 200.0 * sin( omega * t);
-            isClockwise = 1;
-            tn+=10;
-            
-            break;
-        case GLUT_KEY_RIGHT:
-            tn = isClockwise>0? -tn:tn;
-            isClockwise = -1;
-            t = dt * tn;
-            _ViewPointX = 200.0 * cos( omega * t);
-            _ViewPointY = -200.0 * sin( omega * t);
-            tn+=10;
-            break;
-        case GLUT_KEY_UP:
-            _ViewPointZ +=10;
-            break;
-        case GLUT_KEY_DOWN:
-            _ViewPointZ -=10;
-            break;
-        default:
-            break;
-    }
-}
-
-void normalKeyboard(unsigned char key, int x, int y){
-    switch ( key ){
-        case 'd': //Counterclocwise
-            tn = isClockwise>0? -tn:tn;
-            isClockwise = -1;
-            t = dt * tn;
-            _ViewPointX = 200.0 * cos( omega * t);
-            _ViewPointY = -200.0 * sin( omega * t);
-            tn++;
-            
-            break;
-        case 'a': //Clockwise
-            tn = isClockwise<0? -tn:tn;
-            t = dt * tn;
-            _ViewPointX = 200.0 * cos( omega * t);
-            _ViewPointY = 200.0 * sin( omega * t);
-            isClockwise = 1;
-            tn++;
-            break;
-        case 'q':
-            exit(0);
-            break;
-        case 27:
-            exit(0);
-            break;
-        default:
-            break;
-    }
-}
-
-
-
-//main function to render; can call other drawing function.
-void display(void) {   //function for rendering
-    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear buffer
-    
-    //Projection matrix-------------------------------------------
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(30.0, (double)_WindowWidth/(double)_WindowHeight, 0.1, 1000.0);
-    //viewPoint---------------------------------------------------
-    gluLookAt(
-              _ViewPointX,  _ViewPointY    ,  _ViewPointZ,
-              0.0, 0.0,   0.0,
-              0.0,    0.0,   1.0 );
-    //------------------------------------------------------------
-    
-    
-    //setting the viewpoint to modelview--------------------------
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();//initialize model matrix
-    glViewport(0, 0, _WindowWidth, _WindowHeight);
-    //------------------------------------------------------------
-    //shadow ON---------------------------------------------------
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);//using light0
-    //------------------------------------------------------------
-    
-    //Cube
-    glPushMatrix(); //save current state ; often use with popMatrix so that we can return to original state
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, green);
-    //glColor3d(0.0, 1.0, 0.0);//color setting; if light present, this function call will become useless
-    glTranslated(-20.0, 0.0, 20.0);//translation
-    glutSolidCube(10.0);//draw cube：(side length)
-    glPopMatrix(); //load savefile
-    
-    //Sphere
-    glPushMatrix();
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ms_ruby.ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, ms_ruby.diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, ms_ruby.specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, &ms_ruby.shininess);
-    glTranslated(0.0, 10.0, 20.0);
-    glutSolidSphere(4.0, 20, 20);//Parameter:(radius, The number of subdivisions around the Z axis (similar to lines of longitude), The number of subdivisions along the Z axis (similar to lines of latitude))
-    glPopMatrix();
-    
-    //Cone
-    glPushMatrix();
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, blue);
-    glTranslated(20.0, 100.0, 0.0);
-    glutSolidCone(5.0,10.0,20,20);//Parameter：(radius, height, "longitude", "Latitude")
-    glPopMatrix();
-    
-    //torus
-    glPushMatrix();
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ms_ruby.ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, ms_ruby.diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, ms_ruby.specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, &ms_ruby.shininess);
-    glRotated(90, 0, 1 , 0);
-    glutSolidTorus(3,4.0,20,20);
-    glPopMatrix();
-    
-    //Rectangle
-    glPushMatrix();
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ms_jade.ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, ms_jade.diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, ms_jade.specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, &ms_jade.shininess);
-    glColor3d(0.0, 1.0, 1.0);
-    glTranslated(30.0, 50.0, 0.0);
-    glBegin(GL_QUADS);
-    for (int j = 0; j < 6; ++j) {
-        glNormal3dv(normal[j]); //assigning normal vector
-        for (int i = 0; i < 4; ++i) {
-            glVertex3dv(vertex[face[j][i]]);
-        }
-    }
-    glEnd();
-    //shadow OFF-------------------------------------------------
-    glDisable(GL_LIGHTING);
-    //-----------------------------------------------------------
-    
-    renderGround();
-    
-    glutSwapBuffers(); //update use glFlush() when using GLUE_SINGLE mode
-}
-
-
-
-void renderGround(){
-    
-    double ground_max_x = 300.0;
-    double ground_max_y = 300.0;
-    glColor3d(0.8, 0.8, 0.8);
-    glBegin(GL_LINES);
-    for(double ly = -ground_max_y ;ly <= ground_max_y; ly+=20.0){
-        glVertex3d(-ground_max_x, ly,0);
-        glVertex3d(ground_max_x, ly,0);
-    }
-    for(double lx = -ground_max_x ;lx <= ground_max_x; lx+=20.0){
-        glVertex3d(lx, ground_max_y,0);
-        glVertex3d(lx, -ground_max_y,0);
-    }
-    glEnd();
-}
-
-*/
 //---------------------------------------------------------------------------------------------
 //GLFW 2D
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <time.h>
 //Struct
 typedef struct cell{
     int x;  //coordinates
     int y;
-
+    
     int value; //1 or 0 represent obstacles
 }Cell;
+
+typedef struct car{
+    int x;
+    int y;
+}Car;
+
+
+enum Control{
+    Up,
+    Down,
+    Left,
+    Right
+};
 
 //Prototype
 void drawGrid(void);
 void drawObstacle(Cell**); //take in the gameMap array to check whether value = 1, if so, draw cube
+void drawCar(Car*);
+
 
 Cell** initCell(void);
-void generateRandomObstacle(void);
+void generateRandomObstacle(Cell**);
+void updateCar(Car*, int);
 
 //const Variables
 const int gridSize = 32;
+const int gridNum = 10;
+const int SCREEN_WIDTH = gridSize*gridNum + 100;
+const int SCREEN_HEIGHT = gridSize*gridNum + 100;
 
-const int SCREEN_WIDTH = gridSize*10 + 100;
-const int SCREEN_HEIGHT = gridSize*10 + 100;
 
+Car* car = NULL;
 //Function Definition
 static void inputK(GLFWwindow* window, int key, int scancode, int action, int mods){
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
+      glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+    if(key == GLFW_KEY_LEFT && action == GLFW_PRESS){
+        updateCar(car,Left);
+    }
+    if(key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
+        updateCar(car,Right);
+    }
+    if(key == GLFW_KEY_UP && action == GLFW_PRESS){
+        updateCar(car,Up);
+    }
+    if(key == GLFW_KEY_DOWN && action == GLFW_PRESS){
+        updateCar(car,Down);
+    }
 }
 
 static void error_callback(int error, const char* description){
     fputs(description, stderr);
+}
+
+void updateCar(Car* car, int num){
+    //see enum Control
+    if(num == 0){
+        if(car->y > 50){
+        car->y = (car->y) - gridSize;
+        }
+    }
+    if(num == 1){
+        if(car->y <SCREEN_HEIGHT-(50+gridSize)){
+        car->y = (car->y) + gridSize;
+        }
+    }
+    if(num == 2){
+        if(car->x >50){
+        car->x = (car->x) - gridSize;
+        }
+
+    }
+    if(num == 3){
+        if(car->x < SCREEN_WIDTH-(50+gridSize)){
+        car->x = (car->x) + gridSize;
+        }
+    }
+}
+void drawCar(Car* car){
+    //draw obstacle
+    glColor3d(1.0, 0.0, 1.0);
+    glBegin(GL_QUADS);
+    glVertex2f(car->x, car->y);
+    glVertex2f(car->x+gridSize, car->y);
+    glVertex2f(car->x+gridSize, car->y+gridSize);
+    glVertex2f(car->x, car->y+gridSize);
+    glEnd();
+
 }
 
 void drawGrid(){
@@ -583,33 +330,44 @@ void drawGrid(){
 }
 
 Cell** initCell(){ //initialize a 10x10 cell
-    Cell** gameMap = malloc(sizeof(Cell*)*10);
+    Cell** gameMap = (Cell**)malloc(gridNum*sizeof(Cell*));
     int x = 50;
     int y = 50;
-    for(int i = 0; i<10;i++){
-        *(gameMap+i) = calloc(10, sizeof(Cell));
-        for(int k = 0; k<10;k++){
-            gameMap[i][k].value = 1;
-            gameMap[i][k].x = 50;
-            gameMap[i][k].y = 50;
+    
+    srand(time(0));
+    for(int i = 0; i<gridNum;i++){
+        *(gameMap+i) = (Cell*)calloc(gridNum, sizeof(Cell));
+        for(int k = 0; k<gridNum;k++){
+            if(rand()%10 < 2){
+                
+                gameMap[i][k].value = 1;
+            }
+            else{
+                
+                gameMap[i][k].value = 0;
+            }
+            gameMap[i][k].x = x;
+            gameMap[i][k].y = y;
             x+=gridSize;
-            y+=gridSize;
         }
+        x=50;
+        y+=gridSize;
     }
     return gameMap;
 }
 
+
 void drawObstacle(Cell** gameMap){
     //draw obstacle
-    glColor3d(0.0, 1.0, 1.0);
-    for(int i = 0 ; i<10; i++){
-        for(int k = 0; k<10; k++){
+    glColor3d(0.0, 0.7, 1.0);
+    for(int i = 0 ; i<gridNum; i++){
+        for(int k = 0; k<gridNum; k++){
             if(gameMap[i][k].value != 0){
-                glBegin(GL_POLYGON);
-                glVertex2d(gameMap[i][k].x, gameMap[i][k].y);
-                glVertex2d(gameMap[i][k].x+50, gameMap[i][k].y);
-                glVertex2d(gameMap[i][k].x, gameMap[i][k].y+50);
-                glVertex2d(gameMap[i][k].x+50, gameMap[i][k].y+50);
+                glBegin(GL_QUADS);
+                glVertex2f(gameMap[i][k].x, gameMap[i][k].y);
+                glVertex2f(gameMap[i][k].x+gridSize, gameMap[i][k].y);
+                glVertex2f(gameMap[i][k].x+gridSize, gameMap[i][k].y+gridSize);
+                glVertex2f(gameMap[i][k].x, gameMap[i][k].y+gridSize);
                 glEnd();
             }
             else{}
@@ -634,6 +392,10 @@ int main(void){
     glfwSetKeyCallback(window, inputK);
     
     Cell** gameMap = initCell();
+    //initial car and its position
+    car = malloc(sizeof(Car));
+    car->x = 50;
+    car->y = 50;
     
     while (!glfwWindowShouldClose(window)){
         float ratio;
@@ -650,10 +412,10 @@ int main(void){
         glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT,0, 0, 1);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-
+        
         drawGrid();
         drawObstacle(gameMap);
-        
+        drawCar(car);
         
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -374,13 +374,24 @@ void drawObject(Cell** gameMap){
         for(int i = 0 ; i<gridNum; i++){
         for(int k = 0; k<gridNum; k++){
             if(gameMap[i][k].value == Obstacle){
-                glColor3d(0.0, 0.7, 1.0);
+                glColor3d(0.98, 0.94, 0.83);
                 glBegin(GL_QUADS);
                 glVertex2f(gameMap[i][k].x, gameMap[i][k].y);
                 glVertex2f(gameMap[i][k].x+gridSize, gameMap[i][k].y);
                 glVertex2f(gameMap[i][k].x+gridSize, gameMap[i][k].y+gridSize);
                 glVertex2f(gameMap[i][k].x, gameMap[i][k].y+gridSize);
                 glEnd();
+                
+                if(i<gridNum-1){
+                //wall
+                glColor3d(0.73, 0.66, 0.49);
+                glBegin(GL_QUADS);
+                glVertex2f(gameMap[i+1][k].x, gameMap[i+1][k].y);
+                glVertex2f(gameMap[i+1][k].x+gridSize, gameMap[i+1][k].y);
+                glVertex2f(gameMap[i+1][k].x+gridSize, gameMap[i+1][k].y+gridSize);
+                glVertex2f(gameMap[i+1][k].x, gameMap[i+1][k].y+gridSize);
+                glEnd();
+                }
             }
             else if(gameMap[i][k].value == Chest){   //if change to openChest; initial treasure will be hidden
                 glColor3d(0.2, 0.8, 0.3);
@@ -395,18 +406,20 @@ void drawObject(Cell** gameMap){
     }
 }
 
-//Not working yet
+
 void drawGameOver(){
     int index = 0;
-    for(int i = 0; i<gridNum; i++){
-        for(int k = 0; k<gridNum; k++){
+    for(int k = 0; k<gridNum; k++){
+        for(int i = 0; i<gridNum; i++){
             if(gameOver[index] == 1){
-                glColor3d(0.2, 0.8, 0.0);
+                glColor3d(0.54, 0.49, 0.42);
                 glBegin(GL_QUADS);
-                glVertex2f((i+50)*gridSize, (k+50)*gridSize);
-                glVertex2f((i+50)*gridSize+gridSize, (k+50)*gridSize);
-                glVertex2f((i+50)*gridSize+gridSize, (k+50)*gridSize+gridSize);
-                glVertex2f((i+50)*gridSize, (k+50)*gridSize+gridSize);
+                
+                glVertex2f(i*gridSize+50, k*gridSize+50);
+                glVertex2f(i*gridSize+gridSize+50, k*gridSize+50);
+                glVertex2f(i*gridSize+gridSize+50, k*gridSize+gridSize+50);
+                glVertex2f(i*gridSize+50, k*gridSize+gridSize+50);
+                
                 glEnd();
             }
             else{}
@@ -447,7 +460,7 @@ int main(void){
     car->x = 50;
     car->y = 50;
     car->direaction = Down;
-
+    glfwSetTime	(0);
     while (!glfwWindowShouldClose(window)){
 
         float ratio;
@@ -464,12 +477,33 @@ int main(void){
         glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT,0, 0, 1);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        
+        
         if(openedChest == _numOfTreasure){
+            double elapsedTime = glfwGetTime();
             printf("\n\nCongratulation! You found all the treasure!"
-                   "\nYou have $ %dG in your pocket.",score);
+                   "\nYou hunt for the treasure for %f second(s)"
+                   "\nYou have $ %dG in your pocket.",elapsedTime,score);
             while(!glfwWindowShouldClose(window)){
+                glfwGetFramebufferSize(window, &width, &height);
+                ratio = width / (float) height;
+                glViewport(0, 0, width, height);
+                glClearColor(1.0f,1.0f,1.0f,1.0f);
+                glClear(GL_COLOR_BUFFER_BIT);
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT,0, 0, 1);
+                glMatrixMode(GL_MODELVIEW);
+                glLoadIdentity();
+                
+                drawGrid();
+                drawGameOver();
+                glfwSwapBuffers(window);
                 glfwPollEvents();
             }
+        }
+        else{
+            
         }
             drawGrid();
             drawObject(gameMap);

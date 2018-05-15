@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+
+
 //Struct
 struct Cell{
     int x;  //coordinates
@@ -58,6 +60,8 @@ enum Object{
     Chest,
     OpenChest
 };
+
+
 //Prototype
 void drawGrid(void);
 void drawObject(Cell**); //take in the gameMap array to check whether value = 1, if so, draw cube
@@ -393,7 +397,7 @@ void drawObject(Cell** gameMap){
                 glEnd();
                 }
             }
-            else if(gameMap[i][k].value == Chest){   //if change to openChest; initial treasure will be hidden
+            else if(gameMap[i][k].value == OpenChest){   //if change to openChest; initial treasure will be hidden
                 glColor3d(0.2, 0.8, 0.3);
                 glBegin(GL_QUADS);
                 glVertex2f(gameMap[i][k].x, gameMap[i][k].y);

@@ -84,7 +84,8 @@ const int gridNum = 10;
 const int SCREEN_WIDTH = gridSize*gridNum + 100;
 const int SCREEN_HEIGHT = gridSize*gridNum + 100;
 const int _numOfTreasure = 4;
-const int gameOver[] = {0,0,1,1,1,1,1,1,0,0,
+const int gameOver[] =
+{0,0,1,1,1,1,1,1,0,0,
 0,1,0,0,0,0,0,0,1,0,
 1,1,1,1,0,0,1,1,1,1,
 1,1,1,0,1,1,1,1,0,1,
@@ -103,15 +104,19 @@ int MODE = Manual;
 int openedChest = 0;
 int score = 0;
 int bomb = 5;    //number of bomb
-
+int obstacleHit = 0;
 //Function Definition
 static void inputK(GLFWwindow* window, int key, int scancode, int action, int mods){
     if(key == GLFW_KEY_M && action == GLFW_PRESS){
+        if(MODE == Auto){
+            printf("\nEnding Autonomous Mode. \nThe robot have hit the obstacle %d time(s)", obstacleHit);
+        }
         MODE = Manual;
         printf("\nManual Mode");
     }
     if(key == GLFW_KEY_A && action == GLFW_PRESS){
         MODE = Auto;
+        obstacleHit = 0;
         printf("\nAutonomous Mode");
     }
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
@@ -213,6 +218,7 @@ int collisionCheck(Car* car,  int num){
     if(num == 0){
         if(row > 0){
             if(gameMap[row-1][col].value == Obstacle){
+                obstacleHit++;
                 return 0;
             }
             else{
@@ -226,6 +232,7 @@ int collisionCheck(Car* car,  int num){
     else if(num == 1){
         if(row < gridNum-1){
             if(gameMap[row+1][col].value == Obstacle){
+                obstacleHit++;
                 return 0;
             }
             else{
@@ -239,6 +246,7 @@ int collisionCheck(Car* car,  int num){
     else if(num == 2){
         if(col > 0){
             if(gameMap[row][col-1].value == Obstacle){
+                obstacleHit++;
                 return 0;
             }
             else{
@@ -253,6 +261,7 @@ int collisionCheck(Car* car,  int num){
     else if(num == 3){
         if(col < gridNum-1){
             if(gameMap[row][col+1].value == Obstacle){
+                obstacleHit++;
                 return 0;
             }
             else{
@@ -293,10 +302,17 @@ void updateCar(Car* car, int num){
 
 void drawCar(Car* car){
     //draw obstacle
-    glColor3d(1.0, 0.0, 1.0);
     glBegin(GL_QUADS);
+    glColor3d(1.0, 0.5, 1.0);
     glVertex2f(car->x, car->y);
     glVertex2f(car->x+gridSize, car->y);
+    glVertex2f(car->x+gridSize, car->y+gridSize/2);
+    glVertex2f(car->x, car->y+gridSize/2);
+    
+    
+    glColor3d(1.0, 0.0, 1.0);
+    glVertex2f(car->x, car->y+gridSize/2);
+    glVertex2f(car->x+gridSize, car->y+gridSize/2);
     glVertex2f(car->x+gridSize, car->y+gridSize);
     glVertex2f(car->x, car->y+gridSize);
     glEnd();
@@ -449,12 +465,20 @@ int main(void){
     glfwSetKeyCallback(window, inputK);
     
     printf("\n\n"
-           "\n***********************"
-           "\n*    Instructions     *"
-           "\n* Press M for Manual  *"
-           "\n* Press A for Auto    *"
-           "\n* Press Space to bomb *"
-           "\n***********************");
+           "\nHi there, do you want to go on an advanture to seek the treasure?"
+           "\nIn this game, you will be controlling a robot to find out the hidden treasure in the map."
+           "\n***************************"
+           "\n*    Instructions         *"
+           "\n* Up -- Up arrow key      *"
+           "\n* Down -- Down arrow key  *"
+           "\n* Left -- Left arrow key  *"
+           "\n* Right -- Right arrow key*"
+           "\n*                         *"
+           "\n*                         *"
+           "\n* Press M for Manual      *"
+           "\n* Press A for Auto        *"
+           "\n* Press Space to bomb     *"
+           "\n***************************");
     
     
     
@@ -505,9 +529,6 @@ int main(void){
                 glfwSwapBuffers(window);
                 glfwPollEvents();
             }
-        }
-        else{
-            
         }
             drawGrid();
             drawObject(gameMap);
